@@ -1,0 +1,32 @@
+= ESP-IDF : RF433 Receiver Library
+ifdef::env-github[:outfilesuffix: .adoc]
+
+image:https://img.shields.io/badge/idf-esp32-green[ESP32,link=https://github.com/espressif/esp-idf]
+image:https://img.shields.io/badge/idf-esp8266-green[ESP8266,link=https://github.com/espressif/ESP8266_RTOS_SDK]
+image:https://img.shields.io/badge/license-MIT-green.svg[License: MIT,link=https://opensource.org/licenses/MIT]
+
+Protocols supported:
+
+- EV1527 (RT1527, FP1527, HS1527)
+
+[NOTE]
+====
+Built and tested on:
+
+    - ESP-IDF (ESP32) v4.1-dev (_8442ec341_)
+    - ESP-IDF (ESP8266) v3.3-rc1 (_1d60fbb5_)
+====
+
+== Prerequisites
+
+- 315/433-MHz RF receiver module.
+- ESP32 or ESP8266 family of chips based device.
+- link:https://github.com/espressif/esp-idf[ESP-IDF SDK] and corresponding toolchain installed for ESP32.
+- link:https://github.com/espressif/ESP8266_RTOS_SDK[ESP8266 RTOS SDK] and corresponding toolchain installed for ESP8266.
+
+== Copyright and Licensing
+
+Copyright (C) 2019-2020 Alexey McSakoff +
+Free use of this software is granted under the terms of the MIT License.
+
+See the <<LICENSE#,LICENSE>> file for details.

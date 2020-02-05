@@ -1,0 +1,14 @@
+menu "RF433 Receiver"
+    config RF433_RECEIVER_GPIO
+        int "RF433 Receiver GPIO number"
+        range 0 39
+        default 14
+        help
+            GPIO number (IOxx) connected to 315/433-MHz RF receiver module.
+
+    config RF433_PROTOCOL_EV1527
+        bool "Enable EV1527 chip protocol"
+        default y
+        help
+            Support devices based on EV1527, RT1527, FP1527, HS1527, etc chips.
+endmenu
