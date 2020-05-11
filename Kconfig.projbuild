@@ -1,14 +1,30 @@
-menu "RF433 Receiver"
-    config RF433_RECEIVER_GPIO
-        int "RF433 Receiver GPIO number"
-        range 0 39
-        default 14
-        help
-            GPIO number (IOxx) connected to 315/433-MHz RF receiver module.
+menu "RF 315/433 Module Receiver"
 
-    config RF433_PROTOCOL_EV1527
-        bool "Enable EV1527 chip protocol"
-        default y
+    menu "Protocols"
+        config RF_MODULE_PROTOCOL_EV1527
+            bool "Enable EV1527 chip protocol"
+            default y
+            help
+                Support devices based on EV1527, RT1527, FP1527, HS1527, etc chips.
+    endmenu
+
+    choice RF_MODULE_TASK_CORE_ID
+        bool "Protocol parsers task Core ID"
+        default RF_MODULE_TASK_PINNED_TO_NONE
+        depends on !FREERTOS_UNICORE && !BLINK_USE_RMT
         help
-            Support devices based on EV1527, RT1527, FP1527, HS1527, etc chips.
+            Pinned RF protocol parsers task to core 0 or core 1.
+        config RF_MODULE_TASK_PINNED_TO_NONE
+            bool "None"
+        config RF_MODULE_TASK_PINNED_TO_CORE_0
+            bool "Core 0"
+        config RF_MODULE_TASK_PINNED_TO_CORE_1
+            bool "Core 1"
+    endchoice
+
+    config RF_MODULE_TASK_PINNED_TO_CORE
+        int
+        default 0 if RF_MODULE_TASK_PINNED_TO_CORE_0
+        default 1 if RF_MODULE_TASK_PINNED_TO_CORE_1
+
 endmenu
