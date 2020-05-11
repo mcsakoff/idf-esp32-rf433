@@ -1,20 +1,22 @@
 = ESP-IDF : RF433 Receiver Library
+:icons: font
 ifdef::env-github[:outfilesuffix: .adoc]
 
 image:https://img.shields.io/badge/idf-esp32-green[ESP32,link=https://github.com/espressif/esp-idf]
-image:https://img.shields.io/badge/idf-esp8266-green[ESP8266,link=https://github.com/espressif/ESP8266_RTOS_SDK]
+image:https://img.shields.io/badge/idf-esp8266-yellow[ESP8266,link=https://github.com/espressif/ESP8266_RTOS_SDK]
 image:https://img.shields.io/badge/license-MIT-green.svg[License: MIT,link=https://opensource.org/licenses/MIT]
 
-Protocols supported:
+Protocols supported so far:
 
 - EV1527 (RT1527, FP1527, HS1527)
 
 [NOTE]
 ====
-Built and tested on:
+Tested on:
 
-    - ESP-IDF (ESP32) v4.1-dev (_8442ec341_)
-    - ESP-IDF (ESP8266) v3.3-rc1 (_1d60fbb5_)
+    - ESP-IDF (ESP32) v4.0 (_b0f053d82_)
+    - ESP-IDF (ESP32) v4.1-beta1 (_9778b163b_)
+//    - ESP-IDF (ESP8266) v3.3-rc1 (_1d60fbb5_)  <-- latest version not tested
 ====
 
 == Prerequisites
@@ -23,6 +25,10 @@ Built and tested on:
 - ESP32 or ESP8266 family of chips based device.
 - link:https://github.com/espressif/esp-idf[ESP-IDF SDK] and corresponding toolchain installed for ESP32.
 - link:https://github.com/espressif/ESP8266_RTOS_SDK[ESP8266 RTOS SDK] and corresponding toolchain installed for ESP8266.
+
+== Usage example
+
+- link:https://github.com/mcsakoff/idf-esp32-rf433-example[RF433 Receiver Example]
 
 == Copyright and Licensing
 
