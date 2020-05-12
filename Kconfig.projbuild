@@ -11,7 +11,7 @@ menu "RF 315/433 Module Receiver"
     choice RF_MODULE_TASK_CORE_ID
         bool "Protocol parsers task Core ID"
         default RF_MODULE_TASK_PINNED_TO_NONE
-        depends on !FREERTOS_UNICORE && !BLINK_USE_RMT
+        depends on !(FREERTOS_UNICORE || IDF_TARGET_ESP8266)
         help
             Pinned RF protocol parsers task to core 0 or core 1.
         config RF_MODULE_TASK_PINNED_TO_NONE

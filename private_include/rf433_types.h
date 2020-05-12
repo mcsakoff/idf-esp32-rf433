@@ -1,6 +1,14 @@
 #pragma once
 
 #include <stdint.h>
+#include "sdkconfig.h"
+
+#ifdef CONFIG_IDF_TARGET_ESP8266
+
+#define portYIELD_FROM_ISR() taskYIELD()
+#define GPIO_NUM_NC          -1
+
+#endif
 
 typedef struct {
     int level;
