@@ -63,7 +63,11 @@ static bool reset(pulse_parser_t *p, rf_event_t *event) {
     return event_emitted;
 };
 
-static inline void emit_code_event(pulse_parser_t *p, rf_event_t *event) {
+static inline bool register_code(pulse_parser_t *p, rf_event_t *event) {
+    if (p->captured.bits != p->config.code_bits_len) {
+        reset(p, NULL);
+        return false;
+    }
     if (p->codes_num == 0) {
         p->registered = p->captured;
         emit_event(p, RF_ACTION_START, event);
@@ -75,6 +79,7 @@ static inline void emit_code_event(pulse_parser_t *p, rf_event_t *event) {
         emit_event(p, RF_ACTION_CONTINUE, event);
     }
     p->codes_num++;
+    return true;
 }
 
 static inline bool is_sync_ratio(pulse_parser_t *p, int first, int second) {
@@ -122,9 +127,9 @@ static inline bool parse_next_tick(pulse_parser_t *p,  rf_event_t *event) {
          *       that doesn't have SYNC after it. That is made intentionally. Some devices send zeros as last
          *       bits in last code of the sequence.
          */
-        emit_code_event(p, event);
+        bool event_emitted = register_code(p, event);
         start_new_code(p);
-        return true;
+        return event_emitted;
     } else { // just a noise
         return reset(p, event);
     }
