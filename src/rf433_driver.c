@@ -23,6 +23,7 @@ static size_t s_events_queue_size = 5;
 static xQueueHandle s_pulses_queue = NULL;
 static xQueueHandle s_events_queue = NULL;
 static UBaseType_t s_parser_task_priority = 10;
+static uint8_t s_events_mask = RF_EVENT_START | RF_EVENT_CONTINUE | RF_EVENT_STOP;
 
 static parser_t *parsers[] = {
 #ifdef CONFIG_RF_MODULE_PROTOCOL_EV1527
@@ -46,6 +47,9 @@ static void rf_parser_task(void *arg) {
             // feed pulses to protocol parsers
             for (int n = 0; n < parsers_num; n++) {
                 if (parsers[n]->input(parsers[n], &pulse, &event)) {
+                    if (!(s_events_mask & BIT(event.action))) {
+                        continue;
+                    }
                     UBaseType_t res = xQueueSend(s_events_queue, &event, 500 / portTICK_PERIOD_MS);
                     if (res == pdFALSE) {
                         if (!queue_full) {
@@ -137,6 +141,10 @@ esp_err_t rf_config(const rf_config_t *config) {
     if (config->parser_task_priority != 0) {
         s_parser_task_priority = config->parser_task_priority;
     }
+    s_events_mask = config->events;
+
+    ESP_LOGI(TAG, "Pulses queue: %d | Events queue: %d | Events Mask: 0x%01x",
+            config->pulses_queue_size, config->events_queue_size, s_events_mask);
     return ESP_OK;
 }
 

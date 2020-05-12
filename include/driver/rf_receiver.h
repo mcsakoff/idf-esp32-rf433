@@ -8,9 +8,13 @@ extern "C" {
 #include <freertos/queue.h>
 #include <driver/gpio.h>
 
-#define RF_ACTION_STOP     0
-#define RF_ACTION_START    1
+#define RF_ACTION_START    0
+#define RF_ACTION_STOP     1
 #define RF_ACTION_CONTINUE 2
+
+#define RF_EVENT_START     BIT(RF_ACTION_START)
+#define RF_EVENT_STOP      BIT(RF_ACTION_STOP)
+#define RF_EVENT_CONTINUE  BIT(RF_ACTION_CONTINUE)
 
 /**
 * @brief Data struct for code event
@@ -30,6 +34,7 @@ typedef struct {
     size_t events_queue_size;          // Size of events queue
     size_t pulses_queue_size;          // Size of pulses queue
     UBaseType_t parser_task_priority;  // Priority of the task that parses RF data
+    uint8_t events;                    // Events to send from the driver
 } rf_config_t;
 
 /**
@@ -41,6 +46,7 @@ typedef struct {
         .events_queue_size = 5,     \
         .pulses_queue_size = 120,   \
         .parser_task_priority = 10, \
+        .events = RF_EVENT_START | RF_EVENT_CONTINUE | RF_EVENT_STOP, \
     }
 
 /**
