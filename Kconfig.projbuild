@@ -2,10 +2,64 @@ menu "RF 315/433 Module Receiver"
 
     menu "Protocols"
         config RF_MODULE_PROTOCOL_EV1527
-            bool "Enable EV1527 chip protocol"
+            bool "EV1527 chip protocol (Protocol 1)"
             default y
             help
                 Support devices based on EV1527, RT1527, FP1527, HS1527, etc chips.
+
+        config RF_MODULE_PROTOCOL_2
+            bool "RC Switch's Protocol 2"
+            default n
+            help
+                Not tested yet
+
+        config RF_MODULE_PROTOCOL_3
+            bool "RC Switch's Protocol 3"
+            default n
+            help
+                Not tested yet
+
+        config RF_MODULE_PROTOCOL_4
+            bool "RC Switch's Protocol 4"
+            default n
+            help
+                Not tested yet
+
+        config RF_MODULE_PROTOCOL_5
+            bool "RC Switch's Protocol 5"
+            default n
+            help
+                Not tested yet
+
+        config RF_MODULE_PROTOCOL_HT6P20B
+            bool "HT6P20B chip protocol (Protocol 6)"
+            default n
+            help
+                Not tested yet
+
+        config RF_MODULE_PROTOCOL_HS2303_PT
+            bool "HS2303-PT chip protocol (Protocol 7)"
+            default n
+            help
+                Not tested yet
+
+        config RF_MODULE_PROTOCOL_1BYONE
+            bool "1ByOne Doorbell protocol (Protocol 10)"
+            default n
+            help
+                Not tested yet
+
+        config RF_MODULE_PROTOCOL_HT12E
+            bool "HT12E chip protocol (Protocol 11)"
+            default n
+            help
+                Not tested yet
+
+        config RF_MODULE_PROTOCOL_SM5212
+            bool "SM5212 chip protocol (Protocol 12)"
+            default n
+            help
+                Not tested yet
     endmenu
 
     choice RF_MODULE_TASK_CORE_ID

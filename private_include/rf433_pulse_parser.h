@@ -27,6 +27,7 @@ typedef struct {
 
     int code_bits_len;     // length of the code in bits
     bool inverted;         // if inverted, first pulse will be LOW, and second one will be HIGH
+                           // also for sync first pulse will be long, and second one will be short
 } pulse_parser_config_t;
 
 

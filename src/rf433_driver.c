@@ -29,6 +29,33 @@ static parser_t *parsers[] = {
 #ifdef CONFIG_RF_MODULE_PROTOCOL_EV1527
         NULL,
 #endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_2
+        NULL,
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_3
+        NULL,
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_4
+        NULL,
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_5
+        NULL,
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_HT6P20B
+        NULL,
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_HS2303_PT
+        NULL,
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_1BYONE
+        NULL,
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_HT12E
+        NULL,
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_SM5212
+        NULL,
+#endif
 };
 static int parsers_num = 0;
 
@@ -144,32 +171,74 @@ esp_err_t rf_config(const rf_config_t *config) {
     s_events_mask = config->events;
 
     ESP_LOGI(TAG, "Pulses queue: %d | Events queue: %d | Events Mask: 0x%01x",
-            config->pulses_queue_size, config->events_queue_size, s_events_mask);
+             config->pulses_queue_size, config->events_queue_size, s_events_mask);
     return ESP_OK;
+}
+
+void add_pulse_parser(const pulse_parser_config_t *config, const char *name) {
+    parser_t *parser = pulse_parser_new(config);
+    if (parser == NULL) {
+        ESP_LOGE(TAG, "%s parser memory allocation error", name);
+    } else {
+        ESP_LOGI(TAG, "%s parser created", name);
+        parsers[parsers_num++] = parser;
+    }
 }
 
 esp_err_t rf_driver_install(int intr_alloc_flags) {
     RF_CHECK(s_events_queue == NULL, "driver already installed", ESP_ERR_INVALID_ARG);
 
     // create protocol parsers
-    parser_t *parser;
-
 #ifdef CONFIG_RF_MODULE_PROTOCOL_EV1527
-    parser = pulse_parser_new(&(pulse_parser_config_t) {
-            .id = 0x1527,
-            .sync_clk = 32,
-            .bit_clk = 4,
-            .code_bits_len = 24,
-            .inverted = false,
-    });
-    if (parser == NULL) {
-        ESP_LOGE(TAG, "EV1527 parser memory allocation error");
-    } else {
-        ESP_LOGI(TAG, "EV1527 parser created");
-        parsers[parsers_num++] = parser;
-    }
+    add_pulse_parser(&(pulse_parser_config_t) {
+            .id = 0x1527, .sync_clk = 32, .bit_clk = 4, .code_bits_len = 24, .inverted = false,
+    }, "EV1527");
 #endif
-
+#ifdef CONFIG_RF_MODULE_PROTOCOL_2
+    add_pulse_parser(&(pulse_parser_config_t) {
+            .id = 0x0002, .sync_clk = 11, .bit_clk = 3, .code_bits_len = 24, .inverted = false,
+    }, "PROTOCOL 2");
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_3
+    add_pulse_parser(&(pulse_parser_config_t) {
+            .id = 0x0003, .sync_clk = 101, .bit_clk = 15, .code_bits_len = 24, .inverted = false,
+    }, "PROTOCOL 3");
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_4
+    add_pulse_parser(&(pulse_parser_config_t) {
+            .id = 0x0004, .sync_clk = 7, .bit_clk = 4, .code_bits_len = 24, .inverted = false,
+    }, "PROTOCOL 4");
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_5
+    add_pulse_parser(&(pulse_parser_config_t) {
+            .id = 0x0005, .sync_clk = 20, .bit_clk = 3, .code_bits_len = 24, .inverted = false,
+    }, "PROTOCOL 5");
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_HT6P20B
+    add_pulse_parser(&(pulse_parser_config_t) {
+            .id = 0x6B20, .sync_clk = 24, .bit_clk = 3, .code_bits_len = 24, .inverted = true,
+    }, "HT6P20B");
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_HS2303_PT
+    add_pulse_parser(&(pulse_parser_config_t) {
+            .id = 0x2303, .sync_clk = 64, .bit_clk = 7, .code_bits_len = 24, .inverted = false,
+    }, "HS2303-PT");
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_1BYONE
+    add_pulse_parser(&(pulse_parser_config_t) {
+            .id = 0x01B1, .sync_clk = 17, .bit_clk = 4, .code_bits_len = 24, .inverted = true,
+    }, "1ByONE");
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_HT12E
+    add_pulse_parser(&(pulse_parser_config_t) {
+            .id = 0x012e, .sync_clk = 17, .bit_clk = 4, .code_bits_len = 24, .inverted = true,
+    }, "HT12E");
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_SM5212
+    add_pulse_parser(&(pulse_parser_config_t) {
+            .id = 0x5212, .sync_clk = 37, .bit_clk = 3, .code_bits_len = 24, .inverted = true,
+    }, "SM5212");
+#endif
     if (parsers_num == 0) {
         ESP_LOGW(TAG, "no protocols parsers created");
     }

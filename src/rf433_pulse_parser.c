@@ -77,6 +77,12 @@ static inline void emit_code_event(pulse_parser_t *p, rf_event_t *event) {
     p->codes_num++;
 }
 
+static inline bool is_sync_ratio(pulse_parser_t *p, int first, int second) {
+    return p->config.inverted ?
+       is_within_range(divint(first, second), &p->sync_ratio) :          //    for inverted
+       is_within_range(divint(second, first), &p->sync_ratio);           //    for non-inverted
+}
+
 static inline bool parse_next_tick(pulse_parser_t *p,  rf_event_t *event) {
     int first_us = p->first_pulse.time_us;
     int second_us = p->second_pulse.time_us;
@@ -86,7 +92,7 @@ static inline bool parse_next_tick(pulse_parser_t *p,  rf_event_t *event) {
     }
 
     if (p->captured.bits == -1) { // <-- looking for SYNC
-        if (!is_within_range(divint(second_us, first_us), &p->sync_ratio)) return false;
+        if (!is_sync_ratio(p, first_us, second_us)) return false;
         // sync pulse found
 
         int sync_width = first_us + second_us;
@@ -108,8 +114,7 @@ static inline bool parse_next_tick(pulse_parser_t *p,  rf_event_t *event) {
     int bit_width = first_us + second_us;
     if (is_within_range(bit_width, &p->bit_us)) {
         // looks like a bit
-    } else if (is_within_range(bit_width, &p->sync_us)                                    // width is SYNC
-               && is_within_range(divint(second_us, first_us), &p->sync_ratio)) {  // ratio is SYNC
+    } else if (is_within_range(bit_width, &p->sync_us) && is_sync_ratio(p, first_us, second_us)) { // width is SYNC and ratio is SYNC
         // found SYNC of next code
 
         /*
