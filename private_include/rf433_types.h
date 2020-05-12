@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 typedef struct {
     int level;
     int64_t time_us;
@@ -14,3 +16,20 @@ typedef struct {
     int data;
     int bits;
 } code_t;
+
+
+typedef struct parser_s parser_t;
+
+struct parser_s {
+    /**
+     * @brief Input a pulse data to parser
+     *
+     * @param parser:    Handle of the parser
+     * @param pulse:     Next pulse
+     * @param out_event: Fill the struct if event happened
+     *
+     * @return
+     *      true if a code parsed and event structure updated
+     */
+    bool (*input)(parser_t *parser, const pulse_t *pulse, rf_event_t *out_event);
+};
