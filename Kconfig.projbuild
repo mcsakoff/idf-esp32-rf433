@@ -60,6 +60,17 @@ menu "RF 315/433 Module Receiver"
             default n
             help
                 Not tested yet
+
+        config RF_MODULE_PROTOCOL_KINGSERRY
+            bool "King-Serry Protocol"
+            default n
+            help
+                The protocol can be found in Shenzhen King-Serry Electronics Co. Ltd's devices.
+                The devices of this manufacturer are offered under different names (e.g.: Smernit).
+
+                You will need very precise RF receiver to reliably read the data.
+                King-Serry uses CMT2210LB (high-frequency receiver of CMOSTEK) and it seems the signal is parsed
+                with dedicated microcontroller.
     endmenu
 
     choice RF_MODULE_TASK_CORE_ID

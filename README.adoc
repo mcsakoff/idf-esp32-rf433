@@ -8,16 +8,24 @@ image:https://img.shields.io/badge/license-MIT-green.svg[License: MIT,link=https
 
 Protocols supported so far:
 
-- EV1527 (RT1527, FP1527, HS1527)
+    - EV1527 (RT1527, FP1527, HS1527)
+    - King-Serry's Protocol
 
 [NOTE]
 ====
 Tested on:
 
-    - ESP-IDF (ESP8266) v3.3-rc1 (_gb74255d0_)
-    - ESP-IDF (ESP32) v4.0 (_gb0f053d82_)
-    - ESP-IDF (ESP32) v4.1-beta1 (_g9778b163b_)
+    - ESP-IDF (ESP8266) v3.4-63 (_ge3348ac7_)
+    - ESP-IDF (ESP32) v4.4.3-171 (_gbe9d294718_)
 ====
+
+Protocols supported but require testing:
+
+    - HT6P20B
+    - HS2303-PT
+    - HT12E
+    - SM5212
+    - 1ByOne Doorbell
 
 == Prerequisites
 
@@ -32,7 +40,7 @@ Tested on:
 
 == Copyright and Licensing
 
-Copyright (C) 2019-2020 Alexey McSakoff +
+Copyright (C) 2019-2022 Alexey McSakoff +
 Free use of this software is granted under the terms of the MIT License.
 
 See the <<LICENSE#,LICENSE>> file for details.

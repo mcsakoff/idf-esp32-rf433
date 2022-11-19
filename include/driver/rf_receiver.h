@@ -22,7 +22,7 @@ extern "C" {
 typedef struct {
     uint8_t action;
     uint8_t bits;
-    uint32_t raw_code;
+    uint64_t raw_code;
     uint16_t protocol;
 } rf_event_t;
 

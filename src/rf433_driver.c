@@ -1,6 +1,7 @@
 #include "driver/rf_receiver.h"
 #include "rf433_types.h"
 #include "rf433_pulse_parser.h"
+#include "rf433_nec_parser.h"
 
 #include <string.h>
 #include <freertos/FreeRTOS.h>
@@ -18,7 +19,7 @@ static const char *TAG = "rf433";
     }
 
 static gpio_num_t s_gpio_num = GPIO_NUM_NC;
-static size_t s_pulses_queue_size = 120;
+static size_t s_pulses_queue_size = 256;
 static size_t s_events_queue_size = 5;
 static xQueueHandle s_pulses_queue = NULL;
 static xQueueHandle s_events_queue = NULL;
@@ -27,6 +28,9 @@ static uint8_t s_events_mask = RF_EVENT_START | RF_EVENT_CONTINUE | RF_EVENT_STO
 
 static parser_t *parsers[] = {
 #ifdef CONFIG_RF_MODULE_PROTOCOL_EV1527
+        NULL,
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_KINGSERRY
         NULL,
 #endif
 #ifdef CONFIG_RF_MODULE_PROTOCOL_2
@@ -63,7 +67,7 @@ static int parsers_num = 0;
  * Task for parsing pulses from RF module
  *****************************************************************************/
 
-static void rf_parser_task(void *arg) {
+static void IRAM_ATTR rf_parser_task(void *arg) {
     ESP_LOGI(TAG, "start parsers task");
 
     pulse_t pulse;
@@ -185,6 +189,16 @@ void add_pulse_parser(const pulse_parser_config_t *config, const char *name) {
     }
 }
 
+void add_nec_parser() {
+    parser_t *parser = nec_parser_new();
+    if (parser == NULL) {
+        ESP_LOGE(TAG, "NEC parser memory allocation error");
+    } else {
+        ESP_LOGI(TAG, "NEC parser created");
+        parsers[parsers_num++] = parser;
+    }
+}
+
 esp_err_t rf_driver_install(int intr_alloc_flags) {
     RF_CHECK(s_events_queue == NULL, "driver already installed", ESP_ERR_INVALID_ARG);
 
@@ -193,6 +207,9 @@ esp_err_t rf_driver_install(int intr_alloc_flags) {
     add_pulse_parser(&(pulse_parser_config_t) {
             .id = 0x1527, .sync_clk = 32, .bit_clk = 4, .code_bits_len = 24, .inverted = false,
     }, "EV1527");
+#endif
+#ifdef CONFIG_RF_MODULE_PROTOCOL_KINGSERRY
+    add_nec_parser();
 #endif
 #ifdef CONFIG_RF_MODULE_PROTOCOL_2
     add_pulse_parser(&(pulse_parser_config_t) {
@@ -254,7 +271,7 @@ esp_err_t rf_driver_install(int intr_alloc_flags) {
 #else
     xTaskCreate(rf_parser_task, "rf_parser",
                 2048, NULL, s_parser_task_priority, NULL);
-#endif // CONFIG_BLINK_TASK_PINNED_TO_CORE
+#endif // CONFIG_RF_MODULE_TASK_PINNED_TO_CORE
 
     // setup GPIO interrupt
     ESP_ERROR_CHECK(gpio_install_isr_service(intr_alloc_flags));

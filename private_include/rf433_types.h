@@ -1,5 +1,7 @@
 #pragma once
 
+#include "driver/rf_receiver.h"
+
 #include <stdint.h>
 #include "sdkconfig.h"
 
@@ -21,10 +23,9 @@ typedef struct {
 } range_t;
 
 typedef struct {
-    int data;
+    uint64_t data;
     int bits;
 } code_t;
-
 
 typedef struct parser_s parser_t;
 
