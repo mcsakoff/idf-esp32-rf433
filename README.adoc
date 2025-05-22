@@ -3,7 +3,7 @@
 ifdef::env-github[:outfilesuffix: .adoc]
 
 image:https://img.shields.io/badge/idf-esp32-green[ESP32,link=https://github.com/espressif/esp-idf]
-image:https://img.shields.io/badge/idf-esp8266-green[ESP8266,link=https://github.com/espressif/ESP8266_RTOS_SDK]
+image:https://img.shields.io/badge/idf-esp8266-yellow[ESP8266,link=https://github.com/espressif/ESP8266_RTOS_SDK]
 image:https://img.shields.io/badge/license-MIT-green.svg[License: MIT,link=https://opensource.org/licenses/MIT]
 
 Protocols supported so far:
@@ -15,8 +15,9 @@ Protocols supported so far:
 ====
 Tested on:
 
-    - ESP-IDF (ESP8266) v3.4-63 (_ge3348ac7_)
-    - ESP-IDF (ESP32) v4.4.3-171 (_gbe9d294718_)
+    - ESP-IDF (ESP32) v5.4 (_fe75355314_)
+
+For earlier ESP-IDF versions see branch `esp-idf-4`.
 ====
 
 Protocols supported but require testing:
@@ -40,7 +41,7 @@ Protocols supported but require testing:
 
 == Copyright and Licensing
 
-Copyright (C) 2019-2022 Alexey McSakoff +
+Copyright (C) 2019-2025 Alexey McSakoff +
 Free use of this software is granted under the terms of the MIT License.
 
 See the <<LICENSE#,LICENSE>> file for details.

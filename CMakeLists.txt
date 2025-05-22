@@ -1,3 +1,7 @@
+set(COMPONENT_REQUIRES
+        "esp_driver_gpio"
+        "esp_timer"
+)
 set(COMPONENT_SRCS
         "src/rf433_driver.c"
         "src/rf433_parser.c"
