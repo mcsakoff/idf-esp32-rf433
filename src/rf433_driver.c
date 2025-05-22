@@ -21,8 +21,8 @@ static const char *TAG = "rf433";
 static gpio_num_t s_gpio_num = GPIO_NUM_NC;
 static size_t s_pulses_queue_size = 256;
 static size_t s_events_queue_size = 5;
-static xQueueHandle s_pulses_queue = NULL;
-static xQueueHandle s_events_queue = NULL;
+static QueueHandle_t s_pulses_queue = NULL;
+static QueueHandle_t s_events_queue = NULL;
 static UBaseType_t s_parser_task_priority = 10;
 static uint8_t s_events_mask = RF_EVENT_START | RF_EVENT_CONTINUE | RF_EVENT_STOP;
 
@@ -140,7 +140,7 @@ static void IRAM_ATTR rf_isr_handler(void *arg) {
  * External interface
  *****************************************************************************/
 
-esp_err_t rf_get_events_handle(xQueueHandle *events) {
+esp_err_t rf_get_events_handle(QueueHandle_t *events) {
     RF_CHECK(events != NULL, "queue address error", ESP_ERR_INVALID_ARG);
     *events = s_events_queue;
     return ESP_OK;

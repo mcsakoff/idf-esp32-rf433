@@ -81,7 +81,7 @@ esp_err_t rf_driver_install(int intr_alloc_flags);
 *     - ESP_ERR_INVALID_ARG Parameter error
 *     - ESP_OK Success
 */
-esp_err_t rf_get_events_handle(xQueueHandle *events);
+esp_err_t rf_get_events_handle(QueueHandle_t *events);
 
 #ifdef __cplusplus
 }
